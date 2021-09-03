@@ -5,10 +5,10 @@ $dark-blue: hsl(209, 23%, 22%);
 $dark-gray: hsl(0, 0%, 52%);
 $very-dark-blue: hsl(200, 15%, 8%);
 $very-dark-blue: hsl(207, 26%, 17%);
-$Very-light-gray: hsl(0, 0%, 98%);
-$White: hsl(0, 0%, 100%);
+$very-light-gray: hsl(0, 0%, 98%);
+$white: hsl(0, 0%, 100%);
 
 // font
 $font: 'Nunito Sans', sans-serif;
-$home-font-size: 0.875rem;
-$detail-font-size: 1rem;
+$font-md: 0.875rem; //14px
+$font-reg: 1rem; //16px
