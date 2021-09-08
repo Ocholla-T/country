@@ -1,10 +1,5 @@
 <template>
-  <nav
-    ref="nav"
-    class="nav nav-light container flex flex-ai-c flex-jc-sb"
-    id="navigation"
-    role="navigation"
-  >
+  <nav ref="nav" class="nav nav-light container flex flex-ai-c flex-jc-sb" role="navigation">
     <p>Where in the world?</p>
     <div class="nav__theme flex flex-jc-c flex-ai-c" @click="changeTheme">
       <div class="nav__icon"></div>
@@ -26,7 +21,7 @@ export default {
     const isDark = computed(() => store.state.theme.isDark);
 
     function changeTheme() {
-      store.commit('changeThemeState');
+      store.commit('theme/changeThemeState');
       if (isDark.value === true) {
         nav.value.classList.add('nav-dark');
         nav.value.classList.remove('nav-light');
@@ -48,19 +43,11 @@ export default {
 <style lang="scss" scoped>
 @use '@/assets/styles/main';
 
-#navigation {
-  @include main.breakpoint-down(medium) {
-    padding: 1rem;
-  }
-
+.nav {
+  margin-bottom: 0.1875rem;
   > p {
     font-weight: 750;
-  }
-}
-
-.nav {
-  @include main.breakpoint-up(large) {
-    > p {
+    @include main.breakpoint-up(large) {
       font-size: 1.5rem;
     }
   }
@@ -84,7 +71,7 @@ export default {
 
   &-light {
     background-color: main.$white;
-    box-shadow: 0px 1px 8px 0px main.$dark-gray;
+    box-shadow: 0px 1px 8px -4px main.$dark-gray;
     color: main.$very-dark-blue-text;
     transition: all 250ms ease-in;
     > div {
