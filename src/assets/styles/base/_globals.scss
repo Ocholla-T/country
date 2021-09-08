@@ -1,3 +1,9 @@
+@use '../abstracts';
+
+* {
+  font-family: abstracts.$font;
+}
+
 .flex {
   display: flex;
 
@@ -18,4 +24,8 @@
 
 .container {
   padding: 1rem 6rem;
+
+  @include abstracts.breakpoint-down(medium) {
+    padding: 1rem;
+  }
 }
