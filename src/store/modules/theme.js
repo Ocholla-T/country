@@ -5,13 +5,7 @@ const state = {
 const getters = {};
 
 const mutations = {
-  changeThemeState: (state) => {
-    if (state.isDark === false) {
-      state.isDark = true;
-    } else {
-      state.isDark = false;
-    }
-  },
+  changeThemeState: (state) => (state.isDark = !state.isDark),
 };
 
 const actions = {};
