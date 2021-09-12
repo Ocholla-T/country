@@ -1,6 +1,6 @@
 <template>
-  <main role="main">
-    <div class="search flex container">
+  <main ref="main" role="main" :class="isDark ? 'main-dark' : 'main-light'">
+    <div ref="search" class="search search-light flex container">
       <div
         class="flex flex-ai-c"
         contenteditable="true"
@@ -10,16 +10,18 @@
         @input="updateCountry"
         @keyup="searchCountry"
       ></div>
-      <div class="flex flex-ai-c" placeholder="Filter by region..."></div>
+      <div
+        class="filter flex flex-ai-c"
+        placeholder="Filter by region..."
+        @click="openDropdown"
+      ></div>
     </div>
     <!-- <p>{{ countries }}</p> -->
-    <div class="dropdown flex container">
-      <p>Africa</p>
-      <p>America</p>
-      <p>Asia</p>
-      <p>Europe</p>
-      <p>Oceania</p>
-    </div>
+    <transition name="dropdown">
+      <div :class="isDark && 'dropdown-dark'" class="dropdown flex container" v-if="isOpen">
+        <p v-for="(region, index) in regions" :key="index">{{ region }}</p>
+      </div>
+    </transition>
   </main>
 </template>
 
@@ -31,21 +33,31 @@ export default {
   name: 'Home',
   setup() {
     const store = useStore();
-    let country = ref('');
+    const country = ref('');
+    const main = ref(null);
+    const isDark = computed(() => store.getters['theme/isDark']);
+    const countries = computed(() => store.getters['search/country']);
+    const isOpen = computed(() => store.getters['filter/isOpen']);
+    const regions = computed(() => store.getters['filter/regions']);
 
     let updateCountry = (event) => {
       let value = event.target.innerText;
       store.commit('search/updateCountry', value);
     };
 
-    const searchCountry = (event) => store.dispatch('search/searchCountry', event);
-    const countries = computed(() => store.getters['search/country']);
+    let searchCountry = (event) => store.dispatch('search/searchCountry', event);
+    let openDropdown = () => store.dispatch('filter/openDropdown');
 
     return {
+      main,
       country,
+      countries,
+      isOpen,
+      regions,
+      isDark,
+      openDropdown,
       updateCountry,
       searchCountry,
-      countries,
     };
   },
 };
@@ -55,13 +67,39 @@ export default {
 @use '../assets/styles/main';
 
 main {
-  background-color: main.$very-light-gray;
   position: relative;
+}
+
+.main-light {
+  background-color: main.$very-light-gray;
+}
+
+.main-dark {
+  background-color: main.$very-dark-blue;
+  > .search {
+    > div {
+      background-color: main.$dark-blue;
+      box-shadow: none;
+      color: main.$white;
+
+      &::after {
+        filter: brightness(0) invert(1);
+      }
+    }
+  }
+}
+
+.search-light {
+  > div {
+    background-color: main.$white;
+    color: main.$dark-gray;
+  }
 }
 .search {
   box-sizing: border-box;
   flex-direction: column;
   font-size: main.$font-md;
+  font-weight: 600;
   gap: 1rem;
   @include main.breakpoint-up(large) {
     font-size: main.$font-reg;
@@ -70,14 +108,12 @@ main {
   }
 
   > div {
-    background-color: main.$white;
     border-radius: 5px;
     box-shadow: 0px 0px 8px -3px main.$dark-gray;
     cursor: pointer;
     font-size: main.$font-reg;
     height: 3rem;
     max-width: 70%;
-
     padding: 0.5rem 4rem;
     position: relative;
 
@@ -87,8 +123,8 @@ main {
 
     //textarea styling
     &:first-of-type {
-      white-space: nowrap;
       overflow: hidden;
+      white-space: nowrap;
       @include main.breakpoint-up(large) {
         width: 40%;
       }
@@ -99,14 +135,15 @@ main {
       &::after {
         content: '';
         background: url('../assets/images/search.svg') no-repeat;
+        height: 1.3rem;
+        left: 1.5rem;
         position: absolute;
         top: 0.825rem;
-        left: 1.5rem;
         width: 1.3rem;
-        height: 1.3rem;
       }
     }
 
+    // filter dropdown
     &:last-of-type {
       padding-left: 1.5rem;
       @include main.breakpoint-up(large) {
@@ -130,7 +167,9 @@ main {
   background-color: main.$white;
   border-radius: 5px;
   box-shadow: 0px 0px 8px -3px main.$dark-gray;
+  color: main.$dark-gray;
   flex-direction: column;
+  font-weight: 600;
   margin: 1rem;
   min-width: 50%;
   padding: 0.5rem 1.5rem;
@@ -138,14 +177,32 @@ main {
   top: 7.5rem;
 
   @include main.breakpoint-up(large) {
-    min-width: 13.5%;
-    right: 5rem;
+    min-width: 12.7%;
+    right: 7rem;
     top: 3.3rem;
   }
 
   > p {
     cursor: pointer;
     margin: 0.125rem;
+
+    &:hover {
+      color: main.$very-dark-blue-text;
+    }
   }
+
+  &-dark {
+    background-color: main.$dark-blue;
+    box-shadow: none;
+    color: main.$white;
+  }
+}
+
+// dropdown animation
+.dropdown-enter-active {
+  animation: fade-in 250ms ease-in;
+}
+.dropdown-leave-active {
+  animation: fade-out 250ms ease-in-out;
 }
 </style>
