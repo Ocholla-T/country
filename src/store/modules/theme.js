@@ -2,7 +2,9 @@ const state = {
   isDark: false,
 };
 
-const getters = {};
+const getters = {
+  isDark: (state) => state.isDark,
+};
 
 const mutations = {
   changeThemeState: (state) => (state.isDark = !state.isDark),

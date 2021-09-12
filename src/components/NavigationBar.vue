@@ -82,7 +82,8 @@ export default {
   }
 
   &-dark {
-    box-shadow: 0px 1px 8px 0px main.$very-dark-blue-text;
+    box-shadow: none;
+    margin-bottom: 0;
     background-color: main.$dark-blue;
     color: main.$white;
     transition: all 250ms ease-in;
