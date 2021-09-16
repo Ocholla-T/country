@@ -16,10 +16,10 @@
         @click="openDropdown"
       ></div>
     </div>
-    <!-- <p>{{ countries }}</p> -->
+    <p>{{ countries }}</p>
     <transition name="dropdown">
       <div :class="isDark && 'dropdown-dark'" class="dropdown flex container" v-if="isOpen">
-        <p v-for="(region, index) in regions" :key="index">{{ region }}</p>
+        <p v-for="(region, index) in regions" :key="index" @click="filterCountries">{{ region }}</p>
       </div>
     </transition>
   </main>
@@ -47,6 +47,7 @@ export default {
 
     let searchCountry = (event) => store.dispatch('search/searchCountry', event);
     let openDropdown = () => store.dispatch('filter/openDropdown');
+    let filterCountries = (event) => store.dispatch('filter/filterCountries', event);
 
     return {
       main,
@@ -58,6 +59,7 @@ export default {
       openDropdown,
       updateCountry,
       searchCountry,
+      filterCountries,
     };
   },
 };
@@ -159,6 +161,11 @@ main {
         top: 0.8rem;
         width: 1.2rem;
       }
+
+      &:hover {
+        color: main.$very-dark-blue-text;
+        opacity: 0.75;
+      }
     }
   }
 }
@@ -195,6 +202,12 @@ main {
     background-color: main.$dark-blue;
     box-shadow: none;
     color: main.$white;
+
+    > p {
+      &:hover {
+        color: main.$dark-gray;
+      }
+    }
   }
 }
 
