@@ -86,7 +86,7 @@ export default {
     margin-bottom: 0;
     background-color: main.$dark-blue;
     color: main.$white;
-    transition: all 250ms ease-in;
+    transition: all 350ms ease-in;
     > div {
       > div {
         background: no-repeat url('../assets/images/moon-sharp.svg');
