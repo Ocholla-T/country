@@ -2,55 +2,29 @@ import axios from 'axios';
 
 const state = {
   countryModel: '',
-  country: [],
 };
 
-const getters = {
-  country: (state) => {
-    return state.country;
-  },
-};
+const getters = {};
 
 const actions = {
-  searchCountry: async ({ state, commit }, event) => {
+  searchCountry: async ({ state, dispatch, rootState }, event) => {
     if (event.keyCode === 13) {
       let name = state.countryModel;
       const response = await axios.get(`https://restcountries.eu/rest/v2/name/${name}`);
 
-      if (state.country.length === 0) {
-        response.data.forEach((element) => {
-          let country = {
-            name: element.name,
-            population: element.population,
-            region: element.region,
-            capital: element.capital,
-          };
+      rootState.allCountries.allCountries = [];
 
-          commit('setCountryDetails', country);
-        });
-      } else {
-        state.country = [];
-        response.data.forEach((element) => {
-          let country = {
-            name: element.name,
-            population: element.population,
-            region: element.region,
-            capital: element.capital,
-          };
-
-          commit('setCountryDetails', country);
-        });
-      }
+      response.data.forEach((element) => {
+        dispatch('allCountries/commitAllCountries', element, { root: true });
+      });
     }
   },
 };
 
 const mutations = {
-  updateCountry: (state, payload) => {
+  // update for v-model
+  updateCountryModel: (state, payload) => {
     state.countryModel = payload;
-  },
-  setCountryDetails: (state, payload) => {
-    state.country.push(payload);
   },
 };
 
