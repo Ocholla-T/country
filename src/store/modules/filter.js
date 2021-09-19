@@ -16,6 +16,17 @@ const actions = {
   filterCountries: async ({ rootGetters, rootState, dispatch }, payload) => {
     let region = payload.target.innerText;
 
+    if (rootState.search.countryModel.length !== 0) {
+      const filteredCountries = rootGetters['allCountries/getAllCountries'].filter(
+        (country) => country.region === `${region}`,
+      );
+
+      rootState.allCountries.allCountries = [];
+      filteredCountries.forEach((element) =>
+        dispatch('allCountries/commitAllCountries', element, { root: true }),
+      );
+    }
+
     await dispatch('allCountries/getCountries', null, { root: true });
 
     const filteredCountries = rootGetters['allCountries/getAllCountries'].filter(

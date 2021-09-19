@@ -1,6 +1,6 @@
 <template>
   <main ref="main" role="main" :class="isDark ? 'main-dark' : 'main-light'">
-    <div ref="search" class="search search-light flex container">
+    <div class="search search-light flex container">
       <div
         class="flex flex-ai-c"
         contenteditable="true"
@@ -250,8 +250,13 @@ main {
 
 .country {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 3rem;
-  padding: 1rem 8.5rem;
+  grid-auto-flow: row;
+  gap: 2rem;
+  margin: 1rem 2rem;
+  @include main.breakpoint-up(large) {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem;
+    padding: 1rem 8.5rem;
+  }
 }
 </style>
