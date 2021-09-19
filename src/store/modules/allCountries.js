@@ -10,10 +10,11 @@ const getters = {
 
 const actions = {
   commitAllCountries: ({ commit }, element) => {
+    let formattedPopulation = element.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     let country = {
       flag: element.flag,
       name: element.name,
-      population: element.population,
+      population: formattedPopulation,
       region: element.region,
       capital: element.capital,
     };
