@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 
 const state = {
   isOpen: false,
@@ -18,38 +18,28 @@ const actions = {
   },
   commitCountry: ({ commit }, element) => {
     let country = {
+      flag: element.flag,
       name: element.name,
       population: element.population,
       region: element.region,
       capital: element.capital,
     };
 
-    commit('setCountries', country);
+    commit('allCountries/setAllCountries', country, { root: true });
     state.countries = [];
   },
-  filterCountries: async ({ state, dispatch, rootState }, payload) => {
+  filterCountries: async ({ rootGetters, rootState, dispatch }, payload) => {
     let region = payload.target.innerText;
-    let response = await axios.get(`https://restcountries.eu/rest/v2/region/${region}`);
 
-    // filters all countries in the world according to region
-    if (state.countries.length === 0 && rootState.search.country.length === 0) {
-      response.data.forEach((element) => {
-        dispatch('commitCountry', element);
-      });
-    }
-    // filters searched countries according to their region
-    else if (rootState.search.country.length !== 0) {
-      state.countries = [];
+    await dispatch('allCountries/getCountries', null, { root: true });
 
-      let countriesFilteredByRegion = rootState.search.country.filter(
-        (element) => element.region === `${region}`,
-      );
+    const filteredCountries = rootGetters['allCountries/getAllCountries'].filter(
+      (country) => country.region === `${region}`,
+    );
 
-      // commits the countries to a mutation
-      countriesFilteredByRegion.forEach((element) => {
-        dispatch('commitCountry', element);
-      });
-    }
+    rootState.allCountries.allCountries = [];
+
+    filteredCountries.forEach((element) => dispatch('commitCountry', element));
   },
 };
 
