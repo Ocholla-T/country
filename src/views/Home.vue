@@ -7,7 +7,7 @@
         wrap="off"
         placeholder="Search for a country..."
         :value="country"
-        @input="updateCountry"
+        @input="updateCountryModel"
         @keyup="searchCountry"
       ></div>
       <div
@@ -67,9 +67,9 @@ export default {
       store.dispatch('allCountries/getCountries');
     });
 
-    let updateCountry = (event) => {
+    let updateCountryModel = (event) => {
       let value = event.target.innerText;
-      store.commit('search/updateCountry', value);
+      store.commit('search/updateCountryModel', value);
     };
 
     let searchCountry = (event) => store.dispatch('search/searchCountry', event);
@@ -84,7 +84,7 @@ export default {
       regions,
       isDark,
       openDropdown,
-      updateCountry,
+      updateCountryModel,
       searchCountry,
       filterCountries,
     };
@@ -215,7 +215,7 @@ main {
   @include main.breakpoint-up(large) {
     min-width: 12.7%;
     right: 7rem;
-    top: 3.3rem;
+    top: 4.3rem;
   }
 
   > p {
