@@ -16,29 +16,56 @@
         @click="openDropdown"
       ></div>
     </div>
-    <p>{{ countries }}</p>
     <transition name="dropdown">
       <div :class="isDark && 'dropdown-dark'" class="dropdown flex container" v-if="isOpen">
         <p v-for="(region, index) in regions" :key="index" @click="filterCountries">{{ region }}</p>
       </div>
     </transition>
+    <div class="country ">
+      <CountryCard v-for="(country, index) in allCountries" :key="index">
+        <template v-slot:country__flag>
+          <img :src="country.flag" :alt="'This is the ' + country.name + ' flag'" />
+        </template>
+        <template v-slot:country__name>
+          {{ country.name }}
+        </template>
+        <template v-slot:country__population>
+          {{ country.population }}
+        </template>
+        <template v-slot:country__region>
+          {{ country.region }}
+        </template>
+        <template v-slot:country__capital>
+          {{ country.capital }}
+        </template>
+      </CountryCard>
+    </div>
   </main>
 </template>
 
 <script>
+import CountryCard from '@/components/slots/CountryCard';
 import { computed, ref } from '@vue/reactivity';
 import { useStore } from 'vuex';
+import { onBeforeMount } from '@vue/runtime-core';
 
 export default {
   name: 'Home',
+  components: {
+    CountryCard,
+  },
   setup() {
     const store = useStore();
     const country = ref('');
     const main = ref(null);
     const isDark = computed(() => store.getters['theme/isDark']);
-    const countries = computed(() => store.getters['search/country']);
+    const allCountries = computed(() => store.getters['allCountries/getAllCountries']);
     const isOpen = computed(() => store.getters['filter/isOpen']);
     const regions = computed(() => store.getters['filter/regions']);
+
+    onBeforeMount(() => {
+      store.dispatch('allCountries/getCountries');
+    });
 
     let updateCountry = (event) => {
       let value = event.target.innerText;
@@ -52,7 +79,7 @@ export default {
     return {
       main,
       country,
-      countries,
+      allCountries,
       isOpen,
       regions,
       isDark,
@@ -125,6 +152,7 @@ main {
 
     //textarea styling
     &:first-of-type {
+      margin-top: 1rem;
       overflow: hidden;
       white-space: nowrap;
       @include main.breakpoint-up(large) {
@@ -147,6 +175,7 @@ main {
 
     // filter dropdown
     &:last-of-type {
+      margin-top: 0.5rem;
       padding-left: 1.5rem;
       @include main.breakpoint-up(large) {
         width: 20%;
@@ -179,9 +208,9 @@ main {
   font-weight: 600;
   margin: 1rem;
   min-width: 50%;
-  padding: 0.5rem 1.5rem;
+  padding: 1rem 1.5rem;
   position: absolute;
-  top: 7.5rem;
+  top: 9.5rem;
 
   @include main.breakpoint-up(large) {
     min-width: 12.7%;
@@ -217,5 +246,12 @@ main {
 }
 .dropdown-leave-active {
   animation: fade-out 250ms ease-in-out;
+}
+
+.country {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+  padding: 1rem 8.5rem;
 }
 </style>
