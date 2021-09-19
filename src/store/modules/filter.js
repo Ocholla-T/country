@@ -1,9 +1,6 @@
-// import axios from 'axios';
-
 const state = {
   isOpen: false,
   regions: ['Africa', 'Americas', ' Asia', 'Europe', 'Oceania'],
-  countries: [],
 };
 
 const getters = {
@@ -16,18 +13,6 @@ const actions = {
     state.isOpen = !state.isOpen;
     commit('hasBeenOpened', state.isOpen);
   },
-  commitCountry: ({ commit }, element) => {
-    let country = {
-      flag: element.flag,
-      name: element.name,
-      population: element.population,
-      region: element.region,
-      capital: element.capital,
-    };
-
-    commit('allCountries/setAllCountries', country, { root: true });
-    state.countries = [];
-  },
   filterCountries: async ({ rootGetters, rootState, dispatch }, payload) => {
     let region = payload.target.innerText;
 
@@ -39,13 +24,14 @@ const actions = {
 
     rootState.allCountries.allCountries = [];
 
-    filteredCountries.forEach((element) => dispatch('commitCountry', element));
+    filteredCountries.forEach((element) =>
+      dispatch('allCountries/commitAllCountries', element, { root: true }),
+    );
   },
 };
 
 const mutations = {
   hasBeenOpened: (state, payload) => (state.isOpen = payload),
-  setCountries: (state, payload) => state.countries.push(payload),
 };
 
 export default { namespaced: true, state, getters, actions, mutations };
