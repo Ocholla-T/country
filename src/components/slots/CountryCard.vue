@@ -44,12 +44,6 @@ export default {
     box-shadow: none;
     color: main.$white;
   }
-  // &__flag {
-  //   > img {
-  //     height: 100%;
-  //     width: 100%;
-  //   }
-  // }
 
   &__text {
     padding: 2rem;
