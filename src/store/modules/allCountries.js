@@ -10,19 +10,20 @@ const getters = {
 
 const actions = {
   commitAllCountries: ({ commit }, element) => {
-    let formattedPopulation = element.population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    let capital;
+    Array.isArray(element.capital) ? (capital = element.capital.shift()) : null;
+
     let country = {
-      flag: element.flag,
-      name: element.name,
-      population: formattedPopulation,
+      flag: element.flags.svg,
+      name: element.name.official,
       region: element.region,
-      capital: element.capital,
+      capital: capital,
     };
 
     commit('setAllCountries', country);
   },
   getCountries: async ({ dispatch }) => {
-    let response = await axios.get('https://restcountries.eu/rest/v2/all');
+    let response = await axios.get('https://restcountries.com/v3.1/all');
 
     response.data.forEach((element) => {
       dispatch('commitAllCountries', element);

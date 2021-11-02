@@ -22,15 +22,16 @@
       </div>
     </transition>
     <div class="country ">
-      <CountryCard v-for="(country, index) in allCountries" :key="index">
+      <CountryCard v-for="(country, index) in allCountries" :key="index" :link="country.name">
         <template v-slot:country__flag>
-          <img :src="country.flag" :alt="'This is the ' + country.name + ' flag'" />
+          <img
+            class="country__flag"
+            :src="country.flag"
+            :alt="'This is the ' + country.name + ' flag'"
+          />
         </template>
         <template v-slot:country__name>
           {{ country.name }}
-        </template>
-        <template v-slot:country__population>
-          {{ country.population }}
         </template>
         <template v-slot:country__region>
           {{ country.region }}
@@ -258,6 +259,12 @@ main {
     gap: 3rem;
     padding: 1rem 8rem;
     margin: 1rem 0;
+  }
+
+  &__flag {
+    width: 100%;
+    object-fit: cover;
+    height: 10em;
   }
 }
 </style>
