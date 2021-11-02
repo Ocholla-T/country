@@ -10,6 +10,11 @@ const routes = [
     name: 'Home',
     component: lazyImport('Home'),
   },
+  {
+    path: '/detail/:name',
+    name: 'Detail',
+    component: lazyImport('Detail'),
+  },
 ];
 
 const router = createRouter({
